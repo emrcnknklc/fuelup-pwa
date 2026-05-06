@@ -1,0 +1,5 @@
+ai-backend/data/
+ai-backend/*.log
+*.sec
+*yedek*.json
+*backup*.json
