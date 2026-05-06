@@ -1,8 +1,7 @@
-const FUELUP_CACHE = 'fuelup-pwa-v1';
+const FUELUP_CACHE = 'fuelup-pwa-v2';
 const APP_SHELL = [
   './',
   './index.html',
-  './Sport_Diet_Mobile_App_offline.html',
   './food-database.js',
   './exercises-dataset-main/data/exercises.js',
   './manifest.webmanifest',
@@ -29,13 +28,17 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   if (request.method !== 'GET') return;
+  const requestUrl = new URL(request.url);
+  const isSameOrigin = requestUrl.origin === self.location.origin;
 
   event.respondWith(
     caches.match(request).then((cached) => {
       if (cached) return cached;
       return fetch(request).then((response) => {
-        const copy = response.clone();
-        caches.open(FUELUP_CACHE).then((cache) => cache.put(request, copy)).catch(() => {});
+        if (isSameOrigin && response.ok && response.type === 'basic') {
+          const copy = response.clone();
+          caches.open(FUELUP_CACHE).then((cache) => cache.put(request, copy)).catch(() => {});
+        }
         return response;
       }).catch(() => {
         if (request.mode === 'navigate') return caches.match('./index.html');
