@@ -1,4 +1,4 @@
-const FUELUP_CACHE = 'fuelup-pwa-v9';
+const FUELUP_CACHE = 'fuelup-pwa-v11';
 const APP_SHELL = [
   './',
   './index.html',
